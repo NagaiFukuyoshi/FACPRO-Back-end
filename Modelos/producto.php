@@ -23,7 +23,7 @@
 
         //método eliminar
         public function eliminar($id) {
-            $del = "DELETE * FROM producto WHERE id_producto = $id";
+            $del = "DELETE FROM producto WHERE id_producto = $id";
             mysqli_query($this->conexion, $del);
             $vec = [];
             $vec ["resultado"] = "ok";

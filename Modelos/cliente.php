@@ -11,8 +11,8 @@
         //método consulta
         public function consulta() {
             $con = "SELECT cl.*, d.nombre AS documento, c.nombre AS ciudad FROM cliente cl
-            INNER JOIN documento d ON c.fo_documento = id_documento
-            INNER JOIN ciudad c ON c.fo_ciudad = id_ciudad
+            INNER JOIN documento d ON cl.fo_documento = id_documento
+            INNER JOIN ciudad c ON cl.fo_ciudad = id_ciudad
             ORDER BY cl.nombre";
             $res = mysqli_query($this->conexion, $con);
             $vec = [];
@@ -26,7 +26,7 @@
 
         //método eliminar
         public function eliminar($id) {
-            $del = "DELETE * FROM cliente WHERE id_cliente = $id";
+            $del = "DELETE FROM cliente WHERE id_cliente = $id";
             mysqli_query($this->conexion, $del);
             $vec = [];
             $vec ["resultado"] = "ok";

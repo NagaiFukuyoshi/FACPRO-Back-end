@@ -26,7 +26,7 @@
 
         //método eliminar
         public function eliminar($id) {
-            $del = "DELETE * FROM proveedor WHERE id_proveedor = $id";
+            $del = "DELETE FROM proveedor WHERE id_proveedor = $id";
             mysqli_query($this->conexion, $del);
             $vec = [];
             $vec ["resultado"] = "ok";

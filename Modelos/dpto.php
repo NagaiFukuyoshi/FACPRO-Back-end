@@ -25,7 +25,7 @@
 
         //método eliminar
         public function eliminar($id) {
-            $del = "DELETE * FROM dpto WHERE id_dpto = $id";
+            $del = "DELETE FROM dpto WHERE id_dpto = $id";
             mysqli_query($this->conexion, $del);
             $vec = [];
             $vec ["resultado"] = "ok";

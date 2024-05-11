@@ -23,7 +23,7 @@
 
         //método eliminar
         public function eliminar($id) {
-            $del = "DELETE * FROM documento WHERE id_documento = $id";
+            $del = "DELETE FROM documento WHERE id_documento = $id";
             mysqli_query($this->conexion, $del);
             $vec = [];
             $vec ["resultado"] = "ok";

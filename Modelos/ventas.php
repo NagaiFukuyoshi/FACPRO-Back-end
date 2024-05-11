@@ -10,10 +10,11 @@
 
         //método consulta
         public function consulta() {
-            $con = "SELECT v.*, cl.nombre AS cliente, pr.nombre AS producto FROM ventas v
-            INNER JOIN cliente cl ON v.fo_proveedor = id_cliente
+            $con = "SELECT v.*, cl.nombre AS cliente, emp.nombre AS empleado, pr.nombre AS producto FROM ventas v
+            INNER JOIN cliente cl ON v.fo_cliente = id_cliente
+            INNER JOIN empleado emp ON v.fo_empleado = id_empleado
             INNER JOIN producto pr ON v.fo_producto = id_producto
-            ORDER BY co.nombre";
+            ORDER BY v.fo_cliente, v.fo_empleado, v.fo_producto";
             $res = mysqli_query($this->conexion, $con);
             $vec = [];
 
@@ -26,7 +27,7 @@
 
         //método eliminar
         public function eliminar($id) {
-            $del = "DELETE * FROM ventas WHERE id_venta = $id";
+            $del = "DELETE FROM ventas WHERE id_venta = $id";
             mysqli_query($this->conexion, $del);
             $vec = [];
             $vec ["resultado"] = "ok";

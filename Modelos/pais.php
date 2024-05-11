@@ -23,7 +23,7 @@
 
         //método eliminar
         public function eliminar($id) {
-            $del = "DELETE * FROM pais WHERE id_pais = $id";
+            $del = "DELETE FROM pais WHERE id_pais = $id";
             mysqli_query($this->conexion, $del);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -43,7 +43,7 @@
 
         //método editar
         public function editar($id,$params) {
-            $editar = "UPDATE pais SET nombre_pais = '$params->nombre' WHERE id_pais = $id";
+            $editar = "UPDATE pais SET nombre = '$params->nombre' WHERE id_pais = $id";
             mysqli_query($this->conexion, $editar);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -52,13 +52,13 @@
         }
 
         //método filtro
-        public function filtro($valor) {
-            $filtro = "SELECT * FROM pais WHERE nombre LIKE = '%$valor%";
-            $res = mysqli_query($this->conexion, $filtro);
+        public function filtro($dato) {
+            $con = "SELECT * FROM pais WHERE nombre LIKE '%$dato%'";
+            $res = mysqli_query($this->conexion, $con);
             $vec = [];
 
             while($row = mysqli_fetch_array($res)) {
-                $vec [""] = $row;
+                $vec [] = $row;
             }
 
             return $vec;

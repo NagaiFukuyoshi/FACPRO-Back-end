@@ -21,14 +21,14 @@
         break;
 
         case 'eliminar':
-            $id = $_GET['id'];
+            $id = $_GET['id_dpto'];
             $vec = $dpto->eliminar($id);
         break;
 
         case 'editar':
             $json = file_get_contents('php://input');
             $params = json_decode($json);
-            $id = $_GET['id'];
+            $id = $_GET['id_dpto'];
             $vec = $dpto->editar($id, $params);
         break;
 

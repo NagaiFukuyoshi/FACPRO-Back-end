@@ -10,10 +10,16 @@
 
         //método consulta
         public function consulta() {
-            $con = "SELECT u.*, e.nombre AS empleado FROM usuario u
-            INNER JOIN empleado e ON u.fo_empleado = id_empleado
-            ORDER BY u.nombre";
+            $con = "SELECT usu.*, emp.nombre AS empleado FROM usuario usu
+            INNER JOIN empleado emp ON usu.fo_empleado = id_empleado
+            ORDER BY usu.fo_empleado";
             $res = mysqli_query($this->conexion, $con);
+
+            // Verificar si hay un error en la consulta
+            if (!$res) {
+                die('Error en la consulta SQL: ' . mysqli_error($this->conexion));
+            }
+
             $vec = [];
 
             while($row = mysqli_fetch_array($res)) {
@@ -25,7 +31,7 @@
 
         //método eliminar
         public function eliminar($id) {
-            $del = "DELETE * FROM usuario WHERE id_usuario = $id";
+            $del = "DELETE FROM usuario WHERE id_usuario = $id";
             mysqli_query($this->conexion, $del);
             $vec = [];
             $vec ["resultado"] = "ok";

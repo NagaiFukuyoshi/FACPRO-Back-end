@@ -10,23 +10,31 @@
 
         //método consulta
         public function consulta() {
-            $con = "SELECT co.*, p.nombre AS proveedor, pr.nombre AS producto FROM compras co
-            INNER JOIN proveedor p ON co.fo_proveedor = id_proveedor
-            INNER JOIN producto pr ON co.fo_producto = id_producto
-            ORDER BY co.nombre";
+            $con = "SELECT com.*, prov.nombre AS proveedor, prod.nombre AS producto, emp.nombre AS empleado FROM compras com
+                    INNER JOIN proveedor prov ON com.fo_proveedor = prov.id_proveedor
+                    INNER JOIN producto prod ON com.fo_producto = prod.id_producto
+                    INNER JOIN empleado emp ON com.fo_empleado = emp.id_empleado
+                    ORDER BY com.fo_proveedor, com.fo_producto, com.fo_empleado";
+        
             $res = mysqli_query($this->conexion, $con);
+        
+            // Verificar si hay un error en la consulta
+            if (!$res) {
+                die('Error en la consulta SQL: ' . mysqli_error($this->conexion));
+            }
+        
             $vec = [];
-
-            while($row = mysqli_fetch_array($res)) {
+        
+            while ($row = mysqli_fetch_array($res)) {
                 $vec[] = $row;
-        }
-
+            }
+        
             return $vec;
         }
-
+        
         //método eliminar
         public function eliminar($id) {
-            $del = "DELETE * FROM compras WHERE id_compra = $id";
+            $del = "DELETE FROM compras WHERE id_compras = $id";
             mysqli_query($this->conexion, $del);
             $vec = [];
             $vec ["resultado"] = "ok";

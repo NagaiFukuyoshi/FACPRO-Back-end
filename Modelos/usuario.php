@@ -1,5 +1,5 @@
 <?php
-    class Usuario {
+    class usuario {
         //atributos
         public $conexion;
 
@@ -10,9 +10,7 @@
 
         //método consulta
         public function consulta() {
-            $con = "SELECT usu.*, emp.nombre AS empleado FROM usuario usu
-            INNER JOIN empleado emp ON usu.fo_empleado = id_empleado
-            ORDER BY usu.fo_empleado";
+            $con = "SELECT * FROM usuario ORDER BY nombres";
             $res = mysqli_query($this->conexion, $con);
 
             // Verificar si hay un error en la consulta
@@ -41,7 +39,7 @@
 
         //método insertar
         public function insertar($params) {
-            $ins = "INSERT INTO usuario(usuario, contraseña, fo_empleado) VALUES ('$params->usuario','$params->contraseña', $params->fo_empleado)";
+            $ins = "INSERT INTO usuario(nombres, apellidos, correo, usuario, password) VALUES ('$params->nombres', '$params->apellidos', '$params->correo','$params->usuario','$params->password')";
             mysqli_query($this->conexion, $ins);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -51,7 +49,7 @@
 
         //método editar
         public function editar($id,$params) {
-            $editar = "UPDATE usuario SET usuario = '$params->usuario', contraseña = '$params->contraseña', fo_empleado = $params->fo_empleado WHERE id_usuario = $id";
+            $editar = "UPDATE usuario SET nombres = '$params->nombres', apellidos = '$params->apellidos', correo = '$params->correo', usuario = '$params->usuario', password = '$params->password', fo_empleado = $params->fo_empleado WHERE id_usuario = $id";
             mysqli_query($this->conexion, $editar);
             $vec = [];
             $vec ["resultado"] = "ok";

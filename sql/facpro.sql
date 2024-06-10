@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-05-2024 a las 05:53:53
+-- Tiempo de generación: 10-06-2024 a las 23:49:31
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.0.28
 
@@ -49,7 +49,8 @@ CREATE TABLE `cliente` (
   `fo_ciudad` int(11) NOT NULL,
   `direccion` varchar(50) NOT NULL,
   `telefono` int(12) NOT NULL,
-  `email` varchar(50) NOT NULL
+  `email` varchar(50) NOT NULL,
+  `cv` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -59,7 +60,7 @@ CREATE TABLE `cliente` (
 --
 
 CREATE TABLE `compras` (
-  `id_compra` int(11) NOT NULL,
+  `id_compras` int(11) NOT NULL,
   `fecha` varchar(10) NOT NULL,
   `fo_proveedor` int(11) NOT NULL,
   `fo_producto` int(11) NOT NULL,
@@ -125,6 +126,14 @@ CREATE TABLE `pais` (
   `nombre` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `pais`
+--
+
+INSERT INTO `pais` (`id_pais`, `nombre`) VALUES
+(3, ''),
+(5, '');
+
 -- --------------------------------------------------------
 
 --
@@ -135,9 +144,19 @@ CREATE TABLE `producto` (
   `id_producto` int(11) NOT NULL,
   `nombre` varchar(30) NOT NULL,
   `descripcion` varchar(60) DEFAULT NULL,
-  `precio_Compra` int(30) NOT NULL,
-  `precio_venta` int(30) DEFAULT NULL
+  `precio_compra` int(30) NOT NULL,
+  `precio_venta` int(30) DEFAULT NULL,
+  `cantidad` int(11) DEFAULT NULL,
+  `codigo` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `producto`
+--
+
+INSERT INTO `producto` (`id_producto`, `nombre`, `descripcion`, `precio_compra`, `precio_venta`, `cantidad`, `codigo`) VALUES
+(1, 'caja lapiceros', 'Lapiceros color negro marca norma', 20000, 30000, 10, 101),
+(2, 'Borrador', 'Borrador blanco marca norma', 400, 600, 4, 102);
 
 -- --------------------------------------------------------
 
@@ -155,7 +174,10 @@ CREATE TABLE `proveedor` (
   `direccion` varchar(60) NOT NULL,
   `razon_social` varchar(60) NOT NULL,
   `telefono` int(12) NOT NULL,
-  `email` varchar(60) NOT NULL
+  `email` varchar(60) NOT NULL,
+  `responsable_IVA` tinyint(1) DEFAULT NULL,
+  `autorretenedor` tinyint(1) DEFAULT NULL,
+  `gran_contribuyente` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -167,9 +189,18 @@ CREATE TABLE `proveedor` (
 CREATE TABLE `usuario` (
   `id_usuario` int(11) NOT NULL,
   `usuario` varchar(20) NOT NULL,
-  `contraseña` varchar(10) NOT NULL,
-  `fo_empleado` int(11) NOT NULL
+  `password` varchar(10) NOT NULL,
+  `nombres` varchar(50) DEFAULT NULL,
+  `apellidos` varchar(50) DEFAULT NULL,
+  `correo` varchar(80) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`id_usuario`, `usuario`, `password`, `nombres`, `apellidos`, `correo`) VALUES
+(2, 'kevin29', 'Kevin2024.', 'Kevin', 'Arango', 'vaskev1116@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -215,7 +246,7 @@ ALTER TABLE `cliente`
 -- Indices de la tabla `compras`
 --
 ALTER TABLE `compras`
-  ADD PRIMARY KEY (`id_compra`),
+  ADD PRIMARY KEY (`id_compras`),
   ADD KEY `fo_proveedor` (`fo_proveedor`),
   ADD KEY `fo_producto` (`fo_producto`),
   ADD KEY `fo_empleado` (`fo_empleado`);
@@ -265,8 +296,7 @@ ALTER TABLE `proveedor`
 -- Indices de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  ADD PRIMARY KEY (`id_usuario`),
-  ADD KEY `fo_empleado` (`fo_empleado`);
+  ADD PRIMARY KEY (`id_usuario`);
 
 --
 -- Indices de la tabla `ventas`
@@ -297,7 +327,7 @@ ALTER TABLE `cliente`
 -- AUTO_INCREMENT de la tabla `compras`
 --
 ALTER TABLE `compras`
-  MODIFY `id_compra` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_compras` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `documento`
@@ -321,13 +351,13 @@ ALTER TABLE `empleado`
 -- AUTO_INCREMENT de la tabla `pais`
 --
 ALTER TABLE `pais`
-  MODIFY `id_pais` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pais` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `proveedor`
@@ -339,7 +369,7 @@ ALTER TABLE `proveedor`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `ventas`
@@ -391,12 +421,6 @@ ALTER TABLE `empleado`
 ALTER TABLE `proveedor`
   ADD CONSTRAINT `proveedor_ibfk_1` FOREIGN KEY (`fo_documento`) REFERENCES `documento` (`id_documento`),
   ADD CONSTRAINT `proveedor_ibfk_2` FOREIGN KEY (`fo_ciudad`) REFERENCES `ciudad` (`id_ciudad`);
-
---
--- Filtros para la tabla `usuario`
---
-ALTER TABLE `usuario`
-  ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`fo_empleado`) REFERENCES `empleado` (`id_empleado`);
 
 --
 -- Filtros para la tabla `ventas`

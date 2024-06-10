@@ -16,6 +16,7 @@
 
         case 'insertar':
             $json = file_get_contents('php://input');
+            //$json = '{"nombres":"Kevin", "apellidos":"Arango", "correo":"vaskev1116@gmail.com", "usuario":"Kevin29", "password":"Kevin2024.",}'; //para probar el método insertar
             $params = json_decode($json);
             $vec = $usuario->insertar($params);
         break;

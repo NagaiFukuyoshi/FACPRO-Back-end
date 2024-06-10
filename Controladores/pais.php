@@ -16,7 +16,7 @@
 
         case 'insertar':
             $json = file_get_contents('php://input');
-            //$json = '{"nombre":"Colombia"}';
+            //$json = '{"nombre":"Ecuador"}'; //para probar el método insertar
             $params = json_decode($json);
             $vec = $pais->insertar($params);
         break;
@@ -28,15 +28,15 @@
 
         case 'editar':
             $json = file_get_contents('php://input');
-            //$json = '{"nombre":"Canada"}';
+            //$json = '{"nombre":"Brasil"}'; //para probar el método editar
             $params = json_decode($json);
             $id = $_GET['id_pais'];
             $vec = $pais->editar($id, $params);
         break;
 
         case 'filtro':
-            $dato = $_GET['dato'];
-            //$dato = 'Colombia';
+            //$dato = $_GET['dato']; //para probar el método filtro
+            $dato = 'Brasil';
             $vec = $pais->filtro($dato);
         break;
 

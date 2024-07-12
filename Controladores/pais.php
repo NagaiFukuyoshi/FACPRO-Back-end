@@ -35,8 +35,8 @@
         break;
 
         case 'filtro':
-            //$dato = $_GET['dato']; //para probar el método filtro
-            $dato = 'Brasil';
+            $dato = $_GET['dato']; //para probar el método filtro
+            //$dato = 'Brasil';
             $vec = $pais->filtro($dato);
         break;
 

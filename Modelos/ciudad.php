@@ -53,20 +53,26 @@
             return $vec;
         }
 
-        //método filtro
-        public function filtro($valor) {
-            $filtro = "SELECT c.*, d.nombre AS dpto FROM ciudad c
-            INNER JOIN dpto d ON c.fo_departamento = id_dpto
-            WHERE c.nombre LIKE '%$valor%'";
-            $res = mysqli_query($this->conexion, $filtro);
-            $vec = [];
+// Método filtro
+public function filtro($valor) {
+    $filtro = "SELECT c.*, d.nombre AS dpto FROM ciudad c
+               INNER JOIN dpto d ON c.fo_departamento = id_dpto
+               WHERE c.nombre LIKE '%$valor%'";
 
-            while($row = mysqli_fetch_array($res)) {
-                $vec [""] = $row;
-            }
+    $res = mysqli_query($this->conexion, $filtro);
 
-            return $vec;
-        }
+    if (!$res) {
+        die("Error en la consulta: " . mysqli_error($this->conexion));
     }
+
+    $vec = [];
+
+    while ($row = mysqli_fetch_assoc($res)) {
+        $vec[] = $row;
+    }
+
+    return $vec;
+}
+}
 
 ?>

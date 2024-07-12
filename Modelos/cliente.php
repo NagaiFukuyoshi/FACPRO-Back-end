@@ -36,7 +36,7 @@
 
         //método insertar
         public function insertar($params) {
-            $ins = "INSERT INTO cliente(fo_documento,num_documento,nombre,apellido,razon_social,fo_ciudad,direccion,telefono,email) VALUES ($params->fo_documento,'$params->num_documento','$params->nombre','$params->apellido','$params->razon_social',$params->fo_ciudad,'$params->direccion','$params->telefono','$params->email')";
+            $ins = "INSERT INTO cliente(fo_documento,fo_tipoTercero,num_documento,nombre,apellido,razon_social,fo_ciudad,direccion,telefono,email) VALUES ($params->fo_documento,$params->fo_tipoTercero,'$params->num_documento','$params->nombre','$params->apellido','$params->razon_social',$params->fo_ciudad,'$params->direccion','$params->telefono','$params->email')";
             mysqli_query($this->conexion, $ins);
             $vec = [];
             $vec ["resultado"] = "ok";
@@ -55,18 +55,16 @@
         }
 
         //método filtro
-        public function filtro($valor) {
-            $filtro = "SELECT cl.*, d.nombre AS documento, c.nombre AS ciudad FROM cliente cl
-            INNER JOIN documento d ON c.fo_documento = id_documento
-            INNER JOIN ciudad c ON c.fo_ciudad = id_ciudad
-            WHERE cl.nombre LIKE '%$valor%' OR cl.apellido LIKE %$valor% OR cl.num_documento LIKE %$valor% OR cl.razon_social LIKE %$valor%";
+        public function filtro($dato) {
+            $dato = mysqli_real_escape_string($this->conexion, $dato);
+            $filtro = "SELECT * FROM cliente WHERE nombre LIKE '%$dato%' OR apellido LIKE '%$dato%' ";
             $res = mysqli_query($this->conexion, $filtro);
             $vec = [];
-
-            while($row = mysqli_fetch_array($res)) {
-                $vec [""] = $row;
+        
+            while ($row = mysqli_fetch_array($res)) {
+                $vec[] = $row;
             }
-
+        
             return $vec;
         }
     }

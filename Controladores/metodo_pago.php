@@ -3,39 +3,41 @@
     header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
     require_once("../conexion.php");
-    require_once("../Modelos/proveedor.php");
+    require_once("../Modelos/metodo_pago.php");
 
     $control = $_GET['control'];
 
-    $proveedor = new proveedor($conexion);
+    $metodo_pago = new Metodo_pago($conexion);
 
     switch ($control) {
         case 'consulta':
-            $vec = $proveedor->consulta();
+            $vec = $metodo_pago->consulta();
         break;
 
         case 'insertar':
             $json = file_get_contents('php://input');
-            //$json = '{"fo_tipoTercero":"1","fo_documento":"1","num_documento":"18785648","nombre":"hbdeuy","apellido":"ndeibe","direccion":"dnjnjded","fo_ciudad":"1","email":"ebwh@rnui.com","telefono":"2519856","razon_social":""}';
+            //$json = '{"nombre":"Ecuador"}'; //para probar el método insertar
             $params = json_decode($json);
-            $vec = $proveedor->insertar($params);
+            $vec = $metodo_pago->insertar($params);
         break;
 
         case 'eliminar':
-            $id = $_GET['id_proveedor'];
-            $vec = $proveedor->eliminar($id);
+            $id = $_GET['id_metodo_pago'];
+            $vec = $metodo_pago->eliminar($id);
         break;
 
         case 'editar':
             $json = file_get_contents('php://input');
+            //$json = '{"nombre":"Brasil"}'; //para probar el método editar
             $params = json_decode($json);
-            $id = $_GET['id_proveedor'];
-            $vec = $proveedor->editar($id, $params);
+            $id = $_GET['id_metodo_pago'];
+            $vec = $metodo_pago->editar($id, $params);
         break;
 
         case 'filtro':
-            $dato = $_GET['dato'];
-            $vec = $proveedor->filtro($dato);
+            $dato = $_GET['dato']; //para probar el método filtro
+            //$dato = 'Brasil';
+            $vec = $metodo_pago->filtro($dato);
         break;
 
     }

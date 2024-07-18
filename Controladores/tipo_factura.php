@@ -3,44 +3,38 @@
     header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
     require_once("../conexion.php");
-    require_once("../Modelos/producto.php");
-
-    $vec = [];
+    require_once("../Modelos/tipo_factura.php");
 
     $control = $_GET['control'];
 
-    $producto = new producto($conexion);
+    $tipo_factura = new Tipo_factura($conexion);
 
     switch ($control) {
         case 'consulta':
-            $vec = $producto->consulta();
+            $vec = $tipo_factura->consulta();
         break;
 
         case 'insertar':
             $json = file_get_contents('php://input');
             $params = json_decode($json);
-            $vec = $producto->insertar($params);
+            $vec = $tipo_factura->insertar($params);
         break;
 
         case 'eliminar':
-            $id = $_GET['id_producto'];
-            $vec = $producto->eliminar($id);
+            $id = $_GET['id_tipo_factura'];
+            $vec = $tipo_factura->eliminar($id);
         break;
 
         case 'editar':
             $json = file_get_contents('php://input');
             $params = json_decode($json);
-            $id = $_GET['id_producto'];
-            $vec = $producto->editar($id, $params);
+            $id = $_GET['id_tipo_factura'];
+            $vec = $tipo_factura->editar($id, $params);
         break;
 
         case 'filtro':
             $dato = $_GET['dato'];
-            $vec = $producto->filtro($dato);
-        break;
-
-        default:
-        $vec = ["resultado" => "error", "mensaje" => "Control no válido"];
+            $vec = $tipo_factura->filtro($dato);
         break;
 
     }

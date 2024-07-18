@@ -61,7 +61,6 @@
             return $vec;
         }
         
-
         //método editar
         public function editar($id,$params) {
             $editar = "UPDATE compras SET fecha = '$params->fecha', fo_proveedor = $params->fo_proveedor, fo_producto = $params->fo_producto,precio_compra = $params->precio_compra, cantidad = $params->cantidad, subtotal = $params->subtotal, IVA = $params->IVA, retefuente = $params->retefuente, total_factura = $params->total_factura, total = $params->total, fo_usuario = $params->fo_usuario, fo_codigo = $params->fo_codigo, fo_descripcion = $params->fo_descripcion, fo_retencion = $params->fo_retencion, fo_metodo_pago = $params->fo_metodo_pago, descripcion = $params->descripcion WHERE id_compra = $id";
@@ -80,7 +79,7 @@
                     INNER JOIN usuario usu ON com.fo_usuario = usu.id_usuario
                     INNER JOIN metodo_pago met ON com.fo_metodo_pago = met.id_metodo_pago
                     INNER JOIN retenciones re ON com.fo_retencion = re.id_retencion
-                WHERE com.id_fo_proveedor LIKE '%$valor%' OR co.fecha LIKE %$valor%";
+                WHERE com.id_fo_proveedor LIKE '%$valor%' OR com.fecha LIKE %$valor%";
             $res = mysqli_query($this->conexion, $filtro);
             $vec = [];
 

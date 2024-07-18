@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-07-2024 a las 04:41:15
+-- Tiempo de generación: 18-07-2024 a las 18:55:39
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.0.28
 
@@ -131,15 +131,16 @@ CREATE TABLE `compras` (
   `fo_descripcion` int(11) DEFAULT NULL,
   `fo_retencion` int(11) DEFAULT NULL,
   `fo_metodo_pago` int(11) DEFAULT NULL,
-  `descripcion` varchar(300) DEFAULT NULL
+  `descripcion` varchar(300) DEFAULT NULL,
+  `fo_tipo_factura` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `compras`
 --
 
-INSERT INTO `compras` (`id_compras`, `fecha`, `fo_proveedor`, `fo_producto`, `precio_compra`, `cantidad`, `subtotal`, `IVA`, `retefuente`, `total_factura`, `total`, `fo_usuario`, `fo_codigo`, `fo_descripcion`, `fo_retencion`, `fo_metodo_pago`, `descripcion`) VALUES
-(2, '2024-07-11', 7, 2, 538, 200, 107600, 20444, 3766, 124278, 128044, 2, 2, 2, 6, 3, 'COMPRA DE 200 BORRADORES NORMA');
+INSERT INTO `compras` (`id_compras`, `fecha`, `fo_proveedor`, `fo_producto`, `precio_compra`, `cantidad`, `subtotal`, `IVA`, `retefuente`, `total_factura`, `total`, `fo_usuario`, `fo_codigo`, `fo_descripcion`, `fo_retencion`, `fo_metodo_pago`, `descripcion`, `fo_tipo_factura`) VALUES
+(2, '2024-07-11', 7, 2, 538, 200, 107600, 20444, 3766, 124278, 128044, 2, 2, 2, 6, 3, 'COMPRA DE 200 BORRADORES NORMA', 1);
 
 -- --------------------------------------------------------
 
@@ -2849,11 +2850,10 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`id_producto`, `nombre`, `descripcion`, `precio_compra`, `precio_venta`, `cantidad`, `codigo`, `precio_venta2`, `precio_venta3`, `modelo`, `marca`, `fo_iva`) VALUES
-(2, 'Borrador', 'Borrador blanco marca norma', 400, 600, 4, 102, 650, 700, NULL, 'Norma', 4),
-(12, 'Ega', 'Ega en tarro', 100, 200, 20, 103, 210, 220, '', 'Norma', 4),
-(13, 'Lapicero', 'Tinta roja', 400, 600, 90, 104, 650, 700, NULL, 'Kilometrico', 4),
-(15, 'CORRECTOR', 'CORRECTOR EN TUBO', 0, 1200, 0, 105, 1250, 1500, NULL, '', 4),
-(16, 'LAPIZ', 'LAPIZ N°2 COLOR AMARILLO', 0, 700, 0, 106, 800, 950, NULL, 'NORMA', 4);
+(2, 'Borrador', 'Borrador blanco marca norma', 400, 600, 18, 102, 650, 700, NULL, 'Norma', 4),
+(12, 'Ega', 'Ega en tarro', 100, 200, 35, 103, 210, 220, '', 'Norma', 4),
+(13, 'Lapicero', 'Tinta roja', 400, 600, 96, 104, 650, 700, NULL, 'Kilometrico', 4),
+(15, 'CORRECTOR', 'CORRECTOR EN TUBO', 0, 1200, 345, 105, 1250, 1500, NULL, '', 4);
 
 -- --------------------------------------------------------
 
@@ -2919,7 +2919,8 @@ CREATE TABLE `recibos` (
 --
 
 INSERT INTO `recibos` (`id_recibo`, `fo_cliente`, `fecha`, `fo_usuario`, `fo_codigo`, `fo_cuenta`, `descripcion`, `debito`, `credito`, `total_debito`, `total_credito`, `diferencia`, `fo_codigo2`, `fo_cuenta2`, `descripcion2`, `debito2`, `credito2`) VALUES
-(4, 1, '2024-07-09', 2, 4, 4, 'FAC 2023', 100.00, 0.00, 100.00, 100.00, 0.00, 148, 148, 'FAC 2023', 0, 100);
+(4, 1, '2024-07-09', 2, 4, 4, 'FAC 2023', 100.00, 0.00, 100.00, 100.00, 0.00, 148, 148, 'FAC 2023', 0, 100),
+(5, 1, '2024-07-13', 2, 148, 148, 'FAC 2024', 0.00, 2000000.00, 2000000.00, 2000000.00, 0.00, 4, 4, 'FAC 2024', 2000000, 0);
 
 -- --------------------------------------------------------
 
@@ -3000,6 +3001,25 @@ INSERT INTO `saldoinicial` (`id_saldoinicial`, `fecha`, `fo_usuario`, `fo_codigo
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tipo_factura`
+--
+
+CREATE TABLE `tipo_factura` (
+  `id_tipo_factura` int(11) NOT NULL,
+  `nombre` varchar(200) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tipo_factura`
+--
+
+INSERT INTO `tipo_factura` (`id_tipo_factura`, `nombre`) VALUES
+(1, 'factura compra'),
+(2, 'factura venta');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `tipo_tercero`
 --
 
@@ -3049,7 +3069,7 @@ INSERT INTO `usuario` (`id_usuario`, `usuario`, `password`, `nombres`, `apellido
 
 CREATE TABLE `ventas` (
   `id_venta` int(11) NOT NULL,
-  `fecha` varchar(10) NOT NULL,
+  `fecha` date NOT NULL,
   `fo_cliente` int(11) NOT NULL,
   `fo_producto` int(11) NOT NULL,
   `precio_venta` int(30) NOT NULL,
@@ -3057,10 +3077,23 @@ CREATE TABLE `ventas` (
   `subtotal` int(30) NOT NULL,
   `IVA` int(30) NOT NULL,
   `retefuente` int(30) NOT NULL,
-  `descuentos` int(30) NOT NULL,
+  `total_factura` int(30) NOT NULL,
   `total` int(30) NOT NULL,
-  `fo_empleado` int(11) NOT NULL
+  `fo_usuario` int(11) NOT NULL,
+  `fo_codigo` int(11) DEFAULT NULL,
+  `fo_descripcion` int(11) DEFAULT NULL,
+  `fo_retencion` int(11) DEFAULT NULL,
+  `fo_metodo_pago` int(11) DEFAULT NULL,
+  `descripcion` varchar(200) DEFAULT NULL,
+  `fo_tipo_factura` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `ventas`
+--
+
+INSERT INTO `ventas` (`id_venta`, `fecha`, `fo_cliente`, `fo_producto`, `precio_venta`, `cantidad`, `subtotal`, `IVA`, `retefuente`, `total_factura`, `total`, `fo_usuario`, `fo_codigo`, `fo_descripcion`, `fo_retencion`, `fo_metodo_pago`, `descripcion`, `fo_tipo_factura`) VALUES
+(1, '2024-07-12', 1, 2, 800, 52, 41600, 7904, 1040, 48464, 49504, 2, 2, 2, 5, 4, 'VENTA DE 52 BORRADORES NORMA', 2);
 
 --
 -- Índices para tablas volcadas
@@ -3106,7 +3139,8 @@ ALTER TABLE `compras`
   ADD KEY `fo_descripcion` (`fo_descripcion`),
   ADD KEY `fo_retencion` (`fo_retencion`),
   ADD KEY `fo_metodo_pago` (`fo_metodo_pago`),
-  ADD KEY `compras_ibfk_3` (`fo_usuario`);
+  ADD KEY `compras_ibfk_3` (`fo_usuario`),
+  ADD KEY `fo_tipo_factura` (`fo_tipo_factura`);
 
 --
 -- Indices de la tabla `comprobantes`
@@ -3232,6 +3266,12 @@ ALTER TABLE `saldoinicial`
   ADD KEY `fo_cuenta2` (`fo_cuenta2`);
 
 --
+-- Indices de la tabla `tipo_factura`
+--
+ALTER TABLE `tipo_factura`
+  ADD PRIMARY KEY (`id_tipo_factura`);
+
+--
 -- Indices de la tabla `tipo_tercero`
 --
 ALTER TABLE `tipo_tercero`
@@ -3251,7 +3291,12 @@ ALTER TABLE `ventas`
   ADD PRIMARY KEY (`id_venta`),
   ADD KEY `fo_cliente` (`fo_cliente`),
   ADD KEY `fo_producto` (`fo_producto`),
-  ADD KEY `fo_empleado` (`fo_empleado`);
+  ADD KEY `ventas_ibfk_3` (`fo_usuario`),
+  ADD KEY `fk_fo_codigo` (`fo_codigo`),
+  ADD KEY `fk_fo_descripcion` (`fo_descripcion`),
+  ADD KEY `fk_fo_retencion` (`fo_retencion`),
+  ADD KEY `fk_fo_metodo_pago` (`fo_metodo_pago`),
+  ADD KEY `fk_tipo_factura` (`fo_tipo_factura`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -3339,7 +3384,7 @@ ALTER TABLE `pais`
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `proveedor`
@@ -3351,7 +3396,7 @@ ALTER TABLE `proveedor`
 -- AUTO_INCREMENT de la tabla `recibos`
 --
 ALTER TABLE `recibos`
-  MODIFY `id_recibo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_recibo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `retenciones`
@@ -3372,6 +3417,12 @@ ALTER TABLE `saldoinicial`
   MODIFY `id_saldoinicial` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT de la tabla `tipo_factura`
+--
+ALTER TABLE `tipo_factura`
+  MODIFY `id_tipo_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT de la tabla `tipo_tercero`
 --
 ALTER TABLE `tipo_tercero`
@@ -3387,7 +3438,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  MODIFY `id_venta` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas
@@ -3429,7 +3480,8 @@ ALTER TABLE `compras`
   ADD CONSTRAINT `fo_codigo` FOREIGN KEY (`fo_codigo`) REFERENCES `producto` (`id_producto`),
   ADD CONSTRAINT `fo_descripcion` FOREIGN KEY (`fo_descripcion`) REFERENCES `producto` (`id_producto`),
   ADD CONSTRAINT `fo_metodo_pago` FOREIGN KEY (`fo_metodo_pago`) REFERENCES `metodo_pago` (`id_metodo_pago`),
-  ADD CONSTRAINT `fo_retencion` FOREIGN KEY (`fo_retencion`) REFERENCES `retenciones` (`id_retencion`);
+  ADD CONSTRAINT `fo_retencion` FOREIGN KEY (`fo_retencion`) REFERENCES `retenciones` (`id_retencion`),
+  ADD CONSTRAINT `fo_tipo_factura` FOREIGN KEY (`fo_tipo_factura`) REFERENCES `tipo_factura` (`id_tipo_factura`);
 
 --
 -- Filtros para la tabla `comprobantes`
@@ -3514,9 +3566,14 @@ ALTER TABLE `usuario`
 -- Filtros para la tabla `ventas`
 --
 ALTER TABLE `ventas`
+  ADD CONSTRAINT `fk_fo_codigo` FOREIGN KEY (`fo_codigo`) REFERENCES `producto` (`id_producto`),
+  ADD CONSTRAINT `fk_fo_descripcion` FOREIGN KEY (`fo_descripcion`) REFERENCES `producto` (`id_producto`),
+  ADD CONSTRAINT `fk_fo_metodo_pago` FOREIGN KEY (`fo_metodo_pago`) REFERENCES `metodo_pago` (`id_metodo_pago`),
+  ADD CONSTRAINT `fk_fo_retencion` FOREIGN KEY (`fo_retencion`) REFERENCES `retenciones` (`id_retencion`),
+  ADD CONSTRAINT `fk_tipo_factura` FOREIGN KEY (`fo_tipo_factura`) REFERENCES `tipo_factura` (`id_tipo_factura`),
   ADD CONSTRAINT `ventas_ibfk_1` FOREIGN KEY (`fo_cliente`) REFERENCES `cliente` (`id_cliente`),
   ADD CONSTRAINT `ventas_ibfk_2` FOREIGN KEY (`fo_producto`) REFERENCES `producto` (`id_producto`),
-  ADD CONSTRAINT `ventas_ibfk_3` FOREIGN KEY (`fo_empleado`) REFERENCES `empleado` (`id_empleado`);
+  ADD CONSTRAINT `ventas_ibfk_3` FOREIGN KEY (`fo_usuario`) REFERENCES `usuario` (`id_usuario`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

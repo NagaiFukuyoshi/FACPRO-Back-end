@@ -24,30 +24,31 @@
         //método eliminar
         public function eliminar($id) {
             $del = "DELETE FROM producto WHERE id_producto = $id";
-            mysqli_query($this->conexion, $del);
-            $vec = [];
-            $vec ["resultado"] = "ok";
-            $vec ["mensaje"] = "El producto ha sido eliminado";
+            if(mysqli_query($this->conexion, $del)) {
+                $vec = ["resultado" => "ok", "mensaje" => "El producto ha sido eliminado"];
+            } else {
+                $vec = ["resultado" => "error", "mensaje" => "Error al eliminar el producto: " . mysqli_error($this->conexion)];
+            }
             return $vec;
         }
+        
 
         //método insertar
-//método insertar
-public function insertar($params) {
-    $ins = "INSERT INTO producto(nombre, descripcion, precio_compra, precio_venta, precio_venta2, precio_venta3, cantidad, codigo, fo_iva, marca) 
-            VALUES ('$params->nombre', '$params->descripcion', $params->precio_compra, $params->precio_venta, $params->precio_venta2, $params->precio_venta3, $params->cantidad, '$params->codigo', $params->fo_iva, '$params->marca')";
-    
-    $result = mysqli_query($this->conexion, $ins);
+        public function insertar($params) {
+            $ins = "INSERT INTO producto(nombre, descripcion, precio_compra, precio_venta, precio_venta2, precio_venta3, cantidad, codigo, fo_iva, marca) 
+                    VALUES ('$params->nombre', '$params->descripcion', $params->precio_compra, $params->precio_venta, $params->precio_venta2, $params->precio_venta3, $params->cantidad, '$params->codigo', $params->fo_iva, '$params->marca')";
 
-    if (!$result) {
-        die('Error en la consulta SQL: ' . mysqli_error($this->conexion));
-    }
-
-    $vec = [];
-    $vec["resultado"] = "ok";
-    $vec["mensaje"] = "El producto ha sido guardado";
-    return $vec;
-}
+            $result = mysqli_query($this->conexion, $ins);
+        
+            if (!$result) {
+                die('Error en la consulta SQL: ' . mysqli_error($this->conexion));
+            }
+        
+            $vec = [];
+            $vec["resultado"] = "ok";
+            $vec["mensaje"] = "El producto ha sido guardado";
+            return $vec;
+        }
 
 
         //método editar

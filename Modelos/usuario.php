@@ -49,7 +49,7 @@
 
         //método editar
         public function editar($id,$params) {
-            $editar = "UPDATE usuario SET nombres = '$params->nombres', apellidos = '$params->apellidos', correo = '$params->correo', usuario = '$params->usuario', password = '$params->password', fo_empleado = $params->fo_empleado, fo_rol = $params->fo_rol WHERE id_usuario = $id";
+            $editar = "UPDATE usuario SET nombres = '$params->nombres', apellidos = '$params->apellidos', correo = '$params->correo', usuario = '$params->usuario', password = '$params->password', fo_rol = $params->fo_rol WHERE id_usuario = $id";
             mysqli_query($this->conexion, $editar);
             $vec = [];
             $vec ["resultado"] = "ok";
